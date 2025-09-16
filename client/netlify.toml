@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Optional: handle React Router (so refreshing subpages works)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
