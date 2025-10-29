@@ -1,8 +1,11 @@
 import React from 'react'
+import Location from './pages/Location'
 
 const App = () => {
   return (
-    <div className='text-4xl'>App for location tracking in drones</div>
+    <div>
+      <Location />
+    </div>
   )
 }
 

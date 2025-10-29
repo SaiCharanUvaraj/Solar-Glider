@@ -1,34 +1,32 @@
-from flask import Flask
-from flask_socketio import SocketIO
+from flask import Flask, jsonify
+from flask_socketio import SocketIO, emit
 import configs
 
 app = Flask(__name__)
 
-# Set secret key from env (important for sessions & security)
+# Set secret key
 app.config['SECRET_KEY'] = configs.secretKey
 
-# Initialize socketio with secure CORS
+# Initialize socketio
 socketio = SocketIO(app, cors_allowed_origins=configs.allowedOrigins)
 
-# Import the blueprints
-from Routes.location import locationBp
-app.register_blueprint(locationBp)
+droneStatus = {"location":[]}
 
-# Pass socketio to the blueprints
-import Routes.location as location
-location.socketio = socketio
+@socketio.on("DroneStatus")
+def handleStatusUpdate(data):
+    global droneStatus
+    print("Received from drone:", data)
+    droneStatus = data
+    emit("DroneStatus", droneStatus, broadcast=True)
 
-# Base route
 @app.route('/')
-def home():
+def root():
     return "Flask-SocketIO server for Solar glider is running", 200
 
-# Server execution
 if __name__ == "__main__":
     socketio.run(
         app,
-        host=configs.host,   # from .env -> 127.0.0.1 in dev, 0.0.0.0 in prod
-        port=configs.port,   # default 8000
-        debug=configs.debug  # True in dev, False in prod
+        host=configs.host,
+        port=configs.port,
+        debug=configs.debug
     )
-    print("Server is running on", configs.server)
