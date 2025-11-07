@@ -3,10 +3,7 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
-import dotenv from "dotenv";
-import { allowedOrgins, host, port } from "./config.js";
-
-dotenv.config();
+import { allowedOrgins, host, isDev, port } from "./config.js";
 
 const app = express();
 app.use(cors({ origin: allowedOrgins}));
@@ -39,9 +36,12 @@ io.on("connection", (socket) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Express Socket.IO server for Solar Glider is running");
+  res.send("Express server for Solar Glider Drone Monitoring App is running");
 });
 
-server.listen(port, "0.0.0.0", () => {
-  console.log(`Server in running in http://${host}:${port}`);
+server.listen(port, host , () => {
+  if(isDev)
+    console.log(`Server is running in http://${host}:${port}`);
+  else
+    console.log("Server is running online")
 });
