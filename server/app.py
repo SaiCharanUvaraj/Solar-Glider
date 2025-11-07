@@ -1,16 +1,18 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_socketio import SocketIO, emit
 import configs
 
 app = Flask(__name__)
-
-# Set secret key
 app.config['SECRET_KEY'] = configs.secretKey
 
-# Initialize socketio
-socketio = SocketIO(app, cors_allowed_origins=configs.allowedOrigins)
+# Initialize SocketIO with async worker + proper CORS
+socketio = SocketIO(
+    app,
+    async_mode="eventlet",   # ensures compatibility with WebSocket on Render
+    cors_allowed_origins=configs.allowedOrigins  # comes from .env
+)
 
-droneStatus = {"location":[]}
+droneStatus = {"location": []}
 
 @socketio.on("DroneStatus")
 def handleStatusUpdate(data):
@@ -21,9 +23,10 @@ def handleStatusUpdate(data):
 
 @app.route('/')
 def root():
-    return "Flask-SocketIO server for Solar glider is running", 200
+    return "Flask-SocketIO server for Solar Glider is running", 200
 
 if __name__ == "__main__":
+    # Run with eventlet to avoid worker timeout on SocketIO
     socketio.run(
         app,
         host=configs.host,
