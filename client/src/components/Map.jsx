@@ -1,24 +1,13 @@
-import React, { useEffect } from 'react'
-
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import { useMap } from "react-leaflet";
+import React, { useEffect } from "react";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-const Map = ({position}) => {
+const Map = ({ dronesListInfo }) => {
 
-    const FitToMarker = ({ position })=> {
-        const map = useMap();
-        useEffect(() => {
-            map.setView(position, 20);
-        }, [map, position]);
-        return null;
-    }
-
-    // Fix default icon issue
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({
         iconUrl: markerIcon,
@@ -26,38 +15,60 @@ const Map = ({position}) => {
         shadowUrl: markerShadow,
     });
 
+    const FitToMarkers = ({ dronesListInfo }) => {
+        const map = useMap();
+        useEffect(() => {
+            if (dronesListInfo.length > 0) 
+            {
+                const bounds = L.latLngBounds(dronesListInfo.map(drone => drone.location));
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
+        }, [map, dronesListInfo]);
+        return null;
+    };
+
+    //console.log(dronesListInfo)
+    if (!dronesListInfo || dronesListInfo.length === 0) 
+        return <div>Waiting for drone coordinates...</div>;
+
     return (
         <div>
             <MapContainer
-                style={{
-                    width: "70vw",
-                    height: "80vh", // half of width 2:1 ratio
-                    borderRadius: "0.5rem"
-                }}
-                minZoom={3}   // users can’t zoom out beyond "world view"
-                maxZoom={18}  // max zoom in (optional)
-                worldCopyJump={false} // disable map repeat when panning
-                center={[0, 0]} // world center (near Africa so all continents are visible)
-                zoom={2}
-                maxBounds={[
-                    [-90, -180], // southwest
-                    [90, 180],   // northeast
-                ]}
-                maxBoundsViscosity={1.0} // prevents dragging outside bounds
+                style={{width: "70vw",
+                    height: "80vh",
+                    borderRadius: "0.5rem"}} 
+                center={[0, 0]} zoom={2} minZoom={3} maxZoom={18}
             >
-                <TileLayer
+                <TileLayer 
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-                    noWrap={true}
-                    bounds={[[-90, -180], [90, 180]]}
                 />
-                <Marker position={position}>
-                    <Popup>A pretty popup! <br /> Easily customizable.</Popup>
-                </Marker> 
-                <FitToMarker position={position} />
+
+                {dronesListInfo.map((drone) => (
+                    <Marker 
+                        key={drone.droneId} 
+                        position={drone.location}
+                        ref={(marker) => {
+                            setTimeout(() => {
+                                if (marker && marker._popup)  // ✅ added safe check
+                                {
+                                    marker._popup.options.autoClose = false;
+                                    marker._popup.options.closeOnClick = false;
+                                    marker.openPopup();
+                                }
+                            }, 0);
+                        }}
+                    >
+                        <Popup>
+                            <b>{drone.droneName}</b>
+                        </Popup>
+                    </Marker>
+                ))}
+
+                <FitToMarkers dronesListInfo={dronesListInfo} />
             </MapContainer>
         </div>
-    )
-}
+    );
+};
 
-export default Map
+export default Map;

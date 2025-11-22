@@ -3,7 +3,9 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
-import { allowedOrgins, host, isDev, port } from "./config.js";
+import { allowedOrgins, client, host, isDev, port } from "./config.js";
+import { connectDB } from "./utils/database.js";
+import { saveDroneData } from "./services/DroneInfoService.js";
 
 const app = express();
 app.use(cors({ origin: allowedOrgins}));
@@ -17,26 +19,41 @@ const io = new Server(server, {
   },
 });
 
-let droneStatus = { location: [] };
+// Connect to MongoDB Atlas
+connectDB();
+
+let droneStatus = null;
 
 io.on("connection", (socket) => {
-  console.log("Client connected:", socket.id);
-
-  socket.emit("DroneStatus", droneStatus);
+  console.log("A Client connected to the server");
 
   socket.on("DroneStatus", (data) => {
-    console.log("Received from drone:", data);
+    //console.log("Drone data received", data);
     droneStatus = data;
-    io.emit("DroneStatus", droneStatus); 
+    if(droneStatus)
+    {
+      io.emit("DroneStatus", droneStatus); 
+      //saveDroneData(droneStatus);
+    }
   });
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected:", socket.id);
+    console.log("A Client disconnected from the server");
   });
 });
 
 app.get("/", (req, res) => {
-  res.send("Express server for Solar Glider Drone Monitoring App is running");
+  try 
+  {
+    if(client)
+      return res.redirect(client);
+    else
+      res.status(200).send("No client");
+  } 
+  catch (error) 
+  {
+    res.status(500).send("Server error");
+  }
 });
 
 server.listen(port, host , () => {

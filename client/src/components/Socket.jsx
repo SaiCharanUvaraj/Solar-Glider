@@ -21,7 +21,7 @@ const useSocket = () => {
       });
 
       socketInstance.on("DroneStatus", (data) => {
-        console.log("DroneStatus received:", data);
+        //console.log("DroneStatus received:", data);
         setDroneStatus(data);
       });
     }
