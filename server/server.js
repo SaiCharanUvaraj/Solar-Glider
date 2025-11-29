@@ -4,7 +4,7 @@ import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import { allowedOrgins, client, host, isDev, port } from "./config.js";
-import { connectDB } from "./utils/Database.js";
+import { connectDB } from "./utils/database.js";
 import { saveDroneData } from "./services/DroneInfoService.js";
 import { accountsRoutes } from "./Routes/AccountsRoutes.js";
 
