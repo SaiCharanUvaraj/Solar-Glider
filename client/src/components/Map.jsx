@@ -40,7 +40,7 @@ const Map = ({ dronesListInfo }) => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
                 />
 
-                {dronesListInfo || dronesListInfo.length > 0 && dronesListInfo.map((drone) => (
+                {Array.isArray(dronesListInfo) && dronesListInfo.length > 0 && dronesListInfo.map((drone) => (
                     <Marker 
                         key={drone.droneId} 
                         position={drone.location}
@@ -59,7 +59,7 @@ const Map = ({ dronesListInfo }) => {
                     </Marker>
                 ))}
 
-                {dronesListInfo || dronesListInfo.length > 0 && <FitToMarkers dronesListInfo={dronesListInfo} />}
+                {Array.isArray(dronesListInfo) && dronesListInfo.length > 0 && <FitToMarkers dronesListInfo={dronesListInfo} />}
             </MapContainer>
         </div>
     );
