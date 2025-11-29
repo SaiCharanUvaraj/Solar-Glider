@@ -1,0 +1,89 @@
+/* Center container */
+.signinContainer 
+{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heading
+{
+    font-size: 2rem;
+    font-weight: 600;
+    color: #fff;            /* Looks better on glass background */
+    text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    margin-bottom: 1rem;
+}
+
+/* Glass box */
+.signinBox 
+{
+  width: 400px;
+  padding: 1rem;
+  border-radius: 10px;
+
+  /* Glassmorphism */
+  background: rgb(20, 83, 116, 0.5);    /* Transparent white */
+  backdrop-filter: blur(10px);             /* Frosted glass blur */
+  -webkit-backdrop-filter: blur(10px);     /* Safari support */
+  border-bottom: 1px solid rgba(20, 83, 116, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  display: grid;
+  place-items: center;  
+  gap: 1rem;
+}
+
+.signinBox input 
+{
+  padding: 12px;
+  border-radius: 10px;
+  width: 300px;
+  border: none;
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 1rem;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 0.5rem;
+}
+
+.signinBox input::placeholder 
+{
+  color: #e0e0e0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.signinBox input:focus
+{
+  background: rgba(255, 255, 255, 0.4); 
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.signinBox button 
+{
+  padding: 6px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.4);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #333;
+  width: 100px;
+  transition: 0.3s;
+}
+
+.signinBox button:hover 
+{
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.signinBox button:active
+{
+  background: rgba(255, 255, 255, 0.7);
+  transform: scale(0.9);
+}

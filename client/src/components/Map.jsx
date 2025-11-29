@@ -27,24 +27,20 @@ const Map = ({ dronesListInfo }) => {
         return null;
     };
 
-    //console.log(dronesListInfo)
-    if (!dronesListInfo || dronesListInfo.length === 0) 
-        return <div>Waiting for drone coordinates...</div>;
-
     return (
         <div>
             <MapContainer
                 style={{width: "70vw",
                     height: "80vh",
                     borderRadius: "0.5rem"}} 
-                center={[0, 0]} zoom={2} minZoom={3} maxZoom={18}
+                center={[0, 0]} zoom={3} minZoom={3} maxZoom={18}
             >
                 <TileLayer 
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
                 />
 
-                {dronesListInfo.map((drone) => (
+                {dronesListInfo || dronesListInfo.length > 0 && dronesListInfo.map((drone) => (
                     <Marker 
                         key={drone.droneId} 
                         position={drone.location}
@@ -52,20 +48,18 @@ const Map = ({ dronesListInfo }) => {
                             setTimeout(() => {
                                 if (marker && marker._popup)  // ✅ added safe check
                                 {
-                                    marker._popup.options.autoClose = false;
-                                    marker._popup.options.closeOnClick = false;
                                     marker.openPopup();
                                 }
                             }, 0);
                         }}
                     >
-                        <Popup>
+                        <Popup closeButton={false}>
                             <b>{drone.droneName}</b>
                         </Popup>
                     </Marker>
                 ))}
 
-                <FitToMarkers dronesListInfo={dronesListInfo} />
+                {dronesListInfo || dronesListInfo.length > 0 && <FitToMarkers dronesListInfo={dronesListInfo} />}
             </MapContainer>
         </div>
     );

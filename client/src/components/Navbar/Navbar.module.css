@@ -1,0 +1,29 @@
+.navbar 
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+
+  /* Glassmorphism */
+  background: rgb(232, 232, 232, 0.2);    /* Transparent white */
+  backdrop-filter: blur(10px);             /* Frosted glass blur */
+  -webkit-backdrop-filter: blur(10px);     /* Safari support */
+  border-bottom: 1px solid rgba(232, 232, 232, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  z-index: 1000;
+}
+
+.navbarTitle 
+{
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;            /* Looks better on glass background */
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
