@@ -1,15 +1,15 @@
 import React from 'react'
-import Location from './pages/Location'
-import SignIn from './pages/SignIn/SignIn'
-import Navbar from './components/Navbar/Navbar'
+import { BrowserRouter } from 'react-router-dom'
+import Root from './Root'
+import "./App.css"
 
 const App = () => {
   return (
-    <div>
-      <Navbar />
-      <Location />
-      {/* <SignIn /> */}
-    </div>
+    <BrowserRouter>
+      <div>
+        <Root />
+      </div>
+    </BrowserRouter>
   )
 }
 
