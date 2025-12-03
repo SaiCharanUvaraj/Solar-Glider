@@ -42,7 +42,7 @@ const Map = ({ dronesListInfo }) => {
 
                 {Array.isArray(dronesListInfo) && dronesListInfo.length > 0 && dronesListInfo.map((drone) => (
                     <Marker 
-                        key={drone.droneId} 
+                        key={drone.id} 
                         position={drone.location}
                         ref={(marker) => {
                             setTimeout(() => {
@@ -54,7 +54,7 @@ const Map = ({ dronesListInfo }) => {
                         }}
                     >
                         <Popup closeButton={false}>
-                            <b>{drone.droneName}</b>
+                            <b>{drone.name}</b>
                         </Popup>
                     </Marker>
                 ))}

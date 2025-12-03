@@ -1,7 +1,23 @@
 import mongoose from "mongoose";
 
 const DroneInfoSchema = new mongoose.Schema({
-    droneId: {
+    id: {
+        type: Number,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    speed: {
+        type: Number,
+        required: true,
+    },
+    altitude: {
+        type: Number,
+        required: true,
+    },
+    battery: {
         type: Number,
         required: true,
     },

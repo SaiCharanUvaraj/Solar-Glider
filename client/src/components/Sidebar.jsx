@@ -48,7 +48,7 @@ function Sidebar({ links, appTitle=false  })
                 }
             </div>
 
-            <div className="p-5">
+            <div className="p-3 h-screen overflow-y-auto">
                 <Routes>
                     <Route
                         path="/"

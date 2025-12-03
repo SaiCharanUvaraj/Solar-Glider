@@ -25,7 +25,7 @@ const Root = () => {
         if (!droneStatus) 
             return;
         setDronesInfoList(prevList => {
-            const filteredList = prevList.filter(drone => drone.droneId !== droneStatus.droneId);
+            const filteredList = prevList.filter(drone => drone.id !== droneStatus.id);
             return [...filteredList, droneStatus];
         });
     }, [droneStatus]);
