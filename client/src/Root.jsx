@@ -7,6 +7,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 import Analytics from './pages/Analytics/Analytics';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -15,10 +16,12 @@ import Manage from './pages/Manage/Manage';
 import Settings from './pages/Settings/Settings';
 import useSocket from './components/Socket';
 
+import SimulationPopup from "./simulation/SimulationPopup"
+
 export const DroneContext = createContext();
 
 const Root = () => {
-    const { droneStatus } = useSocket();
+    const { droneStatus,showPopup,setShowPopup } = useSocket();
     const [dronesListInfo,setDronesInfoList]=useState([])
 
     useEffect(() => {
@@ -57,7 +60,7 @@ const Root = () => {
         },
         {
             name:"Manage",
-            icon:LocationOnIcon,
+            icon:ConstructionIcon,
             path:"/manage",
             component: Manage
         },
@@ -70,6 +73,7 @@ const Root = () => {
     ]
     return (
         <DroneContext.Provider value={{ dronesListInfo }}>
+            {showPopup && <SimulationPopup setShowPopup={setShowPopup} />}
             <Sidebar links={links} appTitle={true}/>
         </DroneContext.Provider>
     )

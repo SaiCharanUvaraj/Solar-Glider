@@ -2,6 +2,7 @@ import React from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
+import Button from "./Button";
 
 function Sidebar({ links, appTitle=false  }) 
 {
@@ -39,10 +40,7 @@ function Sidebar({ links, appTitle=false  })
                             <Link className="scale-[2] hover:scale-[2.1] active:scale-[1.9] transition-all duration-300"> 
                                 <AccountCircleIcon /> 
                             </Link>
-                            <Link className="p-2 hover:bg-[#145374] rounded flex gap-2 text-lg items-center">
-                                <LogoutIcon />
-                                <p> Log Out </p>
-                            </Link>
+                            <Button Icon={LogoutIcon} text={"Log Out"} />
                         </div>
                     </div>
                 }
