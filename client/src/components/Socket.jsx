@@ -6,10 +6,9 @@ import { notify } from "./Notification";
 let socketInstance = null;
 
 const useSocket = () => {
+  const intervalRef = useRef(null);
   const [droneStatus, setDroneStatus] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-
-  const popupShownRef = useRef(false);
 
   useEffect(() => {
     notify("Connecting to the server for fetching realtime drone data",null,null,true);
@@ -35,23 +34,28 @@ const useSocket = () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (popupShownRef.current) return;
-
-      if (droneStatus === null) 
-      {
+    intervalRef.current = setInterval(() => {
+      if (droneStatus === null)
         setShowPopup(true);
-        popupShownRef.current = true;
-      }
-    }, 5000);
-
-    return () => clearInterval(interval);
+      else
+        setShowPopup(false);
+    }, 10000);
+    return () => clearInterval(intervalRef.current);
   }, [droneStatus]);
+
+  const clearTimeInterval = () => {
+    if (intervalRef.current) 
+    {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
 
   return {
     showPopup,
     droneStatus,
     setShowPopup,
+    clearTimeInterval,
   };
 };
 

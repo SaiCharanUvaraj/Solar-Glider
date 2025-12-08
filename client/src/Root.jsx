@@ -21,7 +21,7 @@ import SimulationPopup from "./simulation/SimulationPopup"
 export const DroneContext = createContext();
 
 const Root = () => {
-    const { droneStatus,showPopup,setShowPopup } = useSocket();
+    const { droneStatus,showPopup,setShowPopup,clearTimeInterval } = useSocket();
     const [dronesListInfo,setDronesInfoList]=useState([])
 
     useEffect(() => {
@@ -73,7 +73,7 @@ const Root = () => {
     ]
     return (
         <DroneContext.Provider value={{ dronesListInfo }}>
-            {showPopup && <SimulationPopup setShowPopup={setShowPopup} />}
+            {showPopup && <SimulationPopup setShowPopup={setShowPopup} clearTimeInterval={clearTimeInterval} />}
             <Sidebar links={links} appTitle={true}/>
         </DroneContext.Provider>
     )

@@ -1,29 +1,47 @@
-import React from "react";
+import React, { useRef } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import Button from "../components/Button";
 import { startDroneSimulation, stopDroneSimulation } from "./DroneSimulation";
 import { serverUrl } from "../../configs";
 import { notify } from "../components/Notification";
 
-const SimulationPopup = ({setShowPopup}) => {
-  const stopSimulation=()=>{
-    stopDroneSimulation();
-    notify("Drone data simulation stoped","failure",null,null,{name:"Start again",onClick:()=>startSimulation()})
-  }
-  const startSimulation=()=>{
+const SimulationPopup = ({setShowPopup,clearTimeInterval}) => {
+  const stopTimeoutRef = useRef(null);
+
+  const closePopup=()=>{
     setShowPopup(false);
-    const socket = startDroneSimulation(serverUrl);
-    notify("Drone data simulation started","success",null,null,{name:"Stop",onClick:()=>stopSimulation()})
-    setTimeout(() => {
-      stopSimulation()
-      socket.disconnect();
-    }, 10000);
+    clearTimeInterval();
   }
+
+  const stopSimulation = (socket) => {
+    if (stopTimeoutRef.current) 
+    {
+      clearTimeout(stopTimeoutRef.current);
+      stopTimeoutRef.current = null;
+    }
+
+    stopDroneSimulation();
+    socket?.disconnect();
+
+    notify("Drone data simulation stopped", "failure", null, null, { name: "Start again", onClick: () => startSimulation() });
+  };
+
+  const startSimulation = () => {
+    closePopup();
+    const socket = startDroneSimulation(serverUrl);
+
+    notify("Drone data simulation started", "success", null, null, { name: "Stop", onClick: () => stopSimulation(socket) });
+
+    stopTimeoutRef.current = setTimeout(() => {
+      stopSimulation(socket);
+    }, 10000);
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
-      <div className="bg-[#00334E]/70 backdrop-blur-md w-[350px] p-5 rounded-md shadow-xl relative">
+      <div className="bg-[#00334E]/70 backdrop-blur-md w-[350px] p-5 rounded-md shadow-xl relative popIn">
 
-        <div onClick={()=>setShowPopup(false)} className="absolute top-3 right-3 text-xl text-[#E8E8E8] cursor-pointer " >
+        <div onClick={()=>closePopup()} className="absolute top-3 right-3 text-xl text-[#E8E8E8] cursor-pointer " >
           <CloseIcon />
         </div>
 
@@ -35,7 +53,8 @@ const SimulationPopup = ({setShowPopup}) => {
             <li>Your drones are inactive and in off state</li>
             <li>Drones lost connection to the server</li>
             <li>No realtime connection to server</li>
-            <li>Weak network</li>
+            <li>Server down</li>
+            <li>Weak or no network</li>
           </ul>
         </div>
 

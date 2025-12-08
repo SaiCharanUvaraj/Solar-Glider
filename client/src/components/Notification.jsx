@@ -31,15 +31,15 @@ export function notify(text,type=null,timer=null,progress=false,link=null)
 const Notification = ({text,type,close,progress,link}) => {
     let bgColor="bg-[#00334E]/70"
     if(type=="success")
-        bgColor="bg-[#0F9D58]/70"
+        bgColor="bg-green-700/60"
     if(type=="failure")
-        bgColor="bg-[#B00020]/70"
+        bgColor="bg-red-700/60"
     return (
-        <div className={"fixed top-5 right-5 backdrop-blur-md text-[#E8E8E8] p-2 rounded-md shadow-xl border border-[#00334E]/60 z-[9999] "+bgColor}>
+        <div className={"fixed top-5 right-5 backdrop-blur-md text-[#E8E8E8] p-2 rounded-md shadow-xl border border-gray-600/60 z-[9999] "+bgColor+" animate-slideInRight"}>
             <div className="text-md font-medium flex gap-3 items-center">
                 <div>{text}</div>
                 {progress && <CircularProgress size="20px" />}
-                {link && <div className='cursor-pointer text-sm hover:underline text-blue-800' onClick={link.onClick}>{link.name}</div>}
+                {link && <div className='cursor-pointer text-sm hover:underline text-blue-900' onClick={link.onClick}>{link.name}</div>}
                 <div className="cursor-pointer ml-2" onClick={()=>close()}> <CloseIcon /> </div>
             </div>
         </div>
